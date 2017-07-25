@@ -1,12 +1,30 @@
 const express = require('express');
-
+const hbs = require('hbs');
 // Make a new request app
 var app = express();
+// using partials ; partials contains a partial piece of the website
+//set up to be able to use partials
+//takes parameter containing absolute location for the directory containing the handlebar partials files
+hbs.registerPartials(__dirname + '/views/partials');
 
+
+app.set('view engine','hbs');
 // Using express middleware to serve static pages
 // This simplifies serving static websites to users
-
 app.use(express.static(__dirname+'/public'));
+
+// functions that you can use multiple times within express
+// takes 2 parameters, 1st = name of the helper, 2nd = function to run the helper
+hbs.registerHelper('getCurrentYear',() => {
+    return new Date().getFullYear();
+    
+
+});
+
+hbs.registerHelper('screamIt', (text) => {
+    return text.toUpperCase();
+})
+
 
 // set a http request route
 
@@ -21,14 +39,24 @@ app.get('/',(req,res)=>{
     // res.send('<h1>Hello Express</h1>')
 
     //send json data back
-    res.send({
-        name:'Suresh Jeyaverasingam',
-        likes:['Biking', 'Cities']
+    // res.send({
+    //     name:'Suresh Jeyaverasingam',
+    //     likes:['Biking', 'Cities']
+    // });s
+
+    res.render('home.hbs',{
+        welcomeMessage: 'Welcome to My Main Page',
+        pageTitle:'My Website',
+        // currentYear:new Date().getFullYear()  -- This is not needed as we now have the helper function getCurrentYear
     });
+
 });
 
 app.get('/about',(req,res) =>{
-    res.send('<b> About Suresh</b>')
+    res.render('about.hbs',{
+        pageTitle: 'About Page',
+        // currentYear:new Date().getFullYear() -- This is not needed as we now have the helper function getCurrentYear
+    })
 });
 
 //test another route but sending bad data
