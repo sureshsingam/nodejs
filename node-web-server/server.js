@@ -1,5 +1,7 @@
 const express = require('express');
 const hbs = require('hbs');
+const fs = require('fs');
+
 // Make a new request app
 var app = express();
 // using partials ; partials contains a partial piece of the website
@@ -9,16 +11,49 @@ hbs.registerPartials(__dirname + '/views/partials');
 
 
 app.set('view engine','hbs');
+
+
+
+// testing the creation and using of a middleware
+// app.use is used to register a middleware
+// takes one function.
+// function is called with three parameters
+// next exists so that we can tell middleware function when it is done
+// you can have as many middleware functions that you have
+// you can do anything you like in the middle ware function
+// only when middleware is complete, type next so that the rest of the code can proceed
+app.use( (req,res, next) => {
+    // This middleware function will log for every request made
+    var now = new Date().toString();
+    var log = `${now}: ${req.method} ${req.url}`;
+    console.log(log);
+    
+    fs.appendFile('server.log',log+'\n', (err) => {
+        if(err){
+            console.log('Unable to append to server.log')
+        }
+    });
+
+    next();
+});
+
+// Doing challenge, have a new piece of middle ware that renders the page under maintenance
+// app.use( (req,res,next) => {
+
+//     res.render('maintenance.hbs');
+    
+// });
+
 // Using express middleware to serve static pages
 // This simplifies serving static websites to users
 app.use(express.static(__dirname+'/public'));
 
+// to use middleware, use app.ise
 // functions that you can use multiple times within express
 // takes 2 parameters, 1st = name of the helper, 2nd = function to run the helper
 hbs.registerHelper('getCurrentYear',() => {
     return new Date().getFullYear();
     
-
 });
 
 hbs.registerHelper('screamIt', (text) => {
