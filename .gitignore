@@ -1,4 +1,4 @@
-node-web-server\modules\
-notes-node\modules\
-weather-app\node-modules\
-note-tests\node-modules\
+node-web-server/node_modules/
+notes-node/node_modules/
+weather-app/node_modules/
+note-tests/node_modules/

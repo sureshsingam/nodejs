@@ -19,8 +19,8 @@ it('should add two numbers', ()=>{
 
 it('should async add 2 numbers', (done) => {
 
-    utils.asyncAdd(3,4, (sum) => {
-        expect(sum).toBe(7).toBeA('number');
+    utils.asyncAdd(3,4, (inputSum) => {
+        expect(inputSum).toBe(7).toBeA('number');
         done();
     });
 });
